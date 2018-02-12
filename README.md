@@ -35,11 +35,11 @@ fg[1 + epsi_start + t] = epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
 
 - **Timestep Length and Elapsed Duration (N & dt)**: *Student discusses the reasoning behind the chosen N (timestep length) and dt (elapsed duration between timesteps) values. Additionally the student details the previous values tried.*
 
-After several tryout, finally I changed the values to `N=20` and `dt=0.15`  instead of initial value `N=25` and `dt=0.05`.
+After several tryout, finally I changed the values to `N=10` and `dt=0.1`  instead of initial value `N=25` and `dt=0.05`.
 
  - Smaller dt is better because it gives finer resolution.
  - Because we use the 100ms latency, so I chose the larger value to deal with the latency.
- - Smaller value than `N=20` is not enough to calculate the trajectory.
+ - Smaller value than `N=10` is not enough to calculate the trajectory.
 
 
 - **Polynomial Fitting and MPC Preprocessing**: *A polynomial is fitted to waypoints. If the student preprocesses waypoints, the vehicle state, and/or actuators prior to the MPC procedure it is described.*
@@ -52,8 +52,22 @@ double y = -(ptsx[i] - px) * sin(psi) + (ptsy[i] - py) * cos(psi);
 
 - **Model Predictive Control with Latency**: *The student implements Model Predictive Control that handles a 100 millisecond latency. Student provides details on how they deal with latency.*
 
-When dealing with the latency,I chose `dt=0.15` .And, I also incorporated the latency into the model.
+When dealing with the latency,I chose `dt=0.1` .And, I also incorporated the latency into the model.
+```cpp
+double x = v * cos(delta) * latency;
+double y = v * sin(delta) * latency;
+psi = v / Lf * delta * latency;
+cte = cte + v * sin(epsi) * latency;
+epsi = epsi + v / Lf * delta * latency;
+v = v + a * latency;
 
+```
+
+## some question:
+I update the latency modeling as the reviewer requested.
+But the results shows not good.
+The vehicle shake around and run out of the way.
+So, can you help to found out the issue? thank you.
 
 ---
 

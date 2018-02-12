@@ -95,7 +95,7 @@ int main() {
           double a = j[1]["throttle"];
 
           v *= 0.44704;
-          delta *= -1;
+          //delta *= -1;
 
 
           /*
