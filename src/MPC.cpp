@@ -21,7 +21,7 @@ double dt = 0.1;
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 
-double ref_v = 100 * 0.44704;
+double ref_v = 38;
 double x_start = 0;
 double y_start = x_start + N;
 double psi_start = y_start + N;
@@ -45,21 +45,42 @@ class FG_eval {
     // the Solver function below.
 
     fg[0] = 0;
-
+/*
     for (int t = 0; t < N; t++) {
-      fg[0] += 5000 * CppAD::pow(vars[cte_start + t], 2);
-      fg[0] += 2500 * CppAD::pow(vars[epsi_start + t], 2);
-      fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
+      fg[0] += 100 * CppAD::pow(vars[cte_start + t], 2); 
+      fg[0] += 100 * CppAD::pow(vars[epsi_start + t], 2);
+      fg[0] += 1 * CppAD::pow(vars[v_start + t] - ref_v, 2);
     }
 
     for (int t = 0; t < N - 1; t++) {
-      fg[0] += 1500 * CppAD::pow(vars[delta_start + t], 2);
-      fg[0] += CppAD::pow(vars[a_start + t], 2);
+      fg[0] += 100 * CppAD::pow(vars[delta_start + t], 2);
+      fg[0] += 10 * CppAD::pow(vars[a_start + t], 2);
+      //fg[0] += 700 * CppAD::pow((vars[a_start + t] * vars[delta_start + t]) , 2);
+
     }
 
     for (int t = 0; t < N - 2; t++) {
-      fg[0] += 5000 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
-      fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
+      fg[0] += 500 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+      fg[0] += 0.1 * CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
+    }
+
+*/
+for (int t = 0; t < N; t++) {
+      fg[0] += 40 * CppAD::pow(vars[cte_start + t], 2);//3000 1000 500 50
+      fg[0] += 0.1 * CppAD::pow(vars[epsi_start + t], 2);//3000,300,30,3,300,30,3000 300,5000,500,300,1,0.05 0.1 0.2
+      fg[0] += 0.45 * CppAD::pow(vars[v_start + t] - ref_v, 2);//10 1 0.35  0.5
+    }
+
+    for (int t = 0; t < N - 1; t++) {
+      fg[0] += 50000 * CppAD::pow(vars[delta_start + t], 2);//5  500  50000
+      fg[0] += 0.1 * CppAD::pow(vars[a_start + t], 2);//5  1  100  5
+      //fg[0] += 7000 * CppAD::pow((vars[a_start + t] * vars[delta_start + t]) , 2);//700  70  7 70 700
+
+    }
+
+    for (int t = 0; t < N - 2; t++) {
+      fg[0] += 8000 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);//20000  10000 5000
+      fg[0] += 0.1 * CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);//10  100 10  1
     }
 
     fg[1 + x_start] = vars[x_start];

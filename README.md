@@ -4,14 +4,16 @@ Self-Driving Car Engineer Nanodegree Program
 
 ## Intro
 
-This repository contains my solution to the Udacity SDCND MPC Project. The vedio is attached in this folder named MPC-2.mp4.
+This repository contains my solution to the Udacity SDCND MPC Project. The vedio is attached in this folder named MPC.mp4(I made this video by my iphone  since if I use the software on my Mac, the simulator will be influnced and the result will not be oK).
 You can check that.
+See picture below.![](./simulator.png)
+
 
 This solution, as the lessons suggest, makes use of the IPOPT and CPPAD libraries to calculate an optimal trajectory and its associated actuation commands in order to minimize error with a third-degree polynomial fit to the given waypoints. The optimization considers only a short duration's worth of waypoints, and produces a trajectory for that duration based upon a model of the vehicle's kinematics and a cost function based mostly on the vehicle's cross-track error (roughly the distance from the track waypoints) and orientation angle error, with other cost factors included to improve performance. 
 
 ## Rubric Points
 
-- **The Model**: *Student describes their model in detail. This includes the state, actuators and update equations.*
+##The Model**: *Student describes their model in detail. This includes the state, actuators and update equations.*
 
  - `x`: The x position of the vehicle.
  - `y`: The y position of the vehicle.
@@ -22,18 +24,17 @@ This solution, as the lessons suggest, makes use of the IPOPT and CPPAD librarie
 
 The update equation is following:
 
-```cpp
 fg[1 + x_start + t] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
 fg[1 + y_start + t] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
 fg[1 + psi_start + t] = psi1 - (psi0 + v0 * delta0 / Lf * dt);
 fg[1 + v_start + t] = v1 - (v0 + a0 * dt);
 fg[1 + cte_start + t] = cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
 fg[1 + epsi_start + t] = epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
-```
 
 
 
-- **Timestep Length and Elapsed Duration (N & dt)**: *Student discusses the reasoning behind the chosen N (timestep length) and dt (elapsed duration between timesteps) values. Additionally the student details the previous values tried.*
+
+##Timestep Length and Elapsed Duration (N & dt)**: *Student discusses the reasoning behind the chosen N (timestep length) and dt (elapsed duration between timesteps) values. Additionally the student details the previous values tried.*
 
 After several tryout, finally I changed the values to `N=10` and `dt=0.1`  instead of initial value `N=25` and `dt=0.05`.
 
@@ -50,7 +51,7 @@ double x = (ptsx[i] - px) * cos(psi) + (ptsy[i] - py) * sin(psi);
 double y = -(ptsx[i] - px) * sin(psi) + (ptsy[i] - py) * cos(psi);
 ```
 
-- **Model Predictive Control with Latency**: *The student implements Model Predictive Control that handles a 100 millisecond latency. Student provides details on how they deal with latency.*
+##Model Predictive Control with Latency**: *The student implements Model Predictive Control that handles a 100 millisecond latency. Student provides details on how they deal with latency.*
 
 When dealing with the latency,I chose `dt=0.1` .And, I also incorporated the latency into the model.
 ```cpp
@@ -60,16 +61,14 @@ psi = v / Lf * delta * latency;
 cte = cte + v * sin(epsi) * latency;
 epsi = epsi + v / Lf * delta * latency;
 v = v + a * latency;
-
 ```
 
-## some question:
-I update the latency modeling as the reviewer requested.
-But the results shows not good.
-The vehicle shake around and run out of the way.
-So, can you help to found out the issue? thank you.
+##some Update:
+Since I update the latency model, so the cost function parameter should be tuned.
 
----
+After a long time, so I make the vehicle can run on the simulator again.
+
+
 
 ## Dependencies
 
